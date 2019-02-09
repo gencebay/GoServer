@@ -22,7 +22,7 @@ deploy:
   provider: releases
   api_key:
     secure: $GITHUB_SECURE
+  file: GoServer
   skip_cleanup: true
-  file: "GoServer"
   on:
-    tags: true
+    repo: gencebay/GoServer
