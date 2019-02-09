@@ -1,0 +1,15 @@
+
+language: go
+go:
+  - 1.11.x
+
+install: true
+
+env:
+  global:
+    - GOARCH=amd64
+    - GO_FOR_RELEASE=1.11
+    - GO111MODULE=on
+
+script:
+  - go build
