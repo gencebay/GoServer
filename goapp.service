@@ -1,0 +1,15 @@
+[Unit]
+Description=Go WebSocket Server
+
+[Service]
+WorkingDirectory=/home/ubuntu/apps/Go
+ExecStart=/home/ubuntu/apps/Go/GoServer
+Restart=always
+# Restart service after 10 seconds if the service crashes:
+RestartSec=10
+KillSignal=SIGINT
+SyslogIdentifier=goserver-app-logs
+User=ubuntu
+
+[Install]
+WantedBy=multi-user.target

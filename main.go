@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"syscall"
 
 	"github.com/gorilla/websocket"
 )
@@ -26,7 +27,7 @@ func wshandler(w http.ResponseWriter, r *http.Request) {
 	for {
 		t, msg, err := conn.ReadMessage()
 		if err != nil {
-			fmt.Println("Can't send")
+			fmt.Printf("Can't send, Error: %v", err)
 			break
 		}
 		conn.WriteMessage(t, msg)
@@ -35,6 +36,16 @@ func wshandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+	// Increase resources limitations - ulimit, connections
+	var rLimit syscall.Rlimit
+	if err := syscall.Getrlimit(syscall.RLIMIT_NOFILE, &rLimit); err != nil {
+		panic(err)
+	}
+	rLimit.Cur = rLimit.Max
+	if err := syscall.Setrlimit(syscall.RLIMIT_NOFILE, &rLimit); err != nil {
+		panic(err)
+	}
+
 	http.HandleFunc("/ws", wshandler)
 
 	if err := http.ListenAndServe(":5000", nil); err != nil {
